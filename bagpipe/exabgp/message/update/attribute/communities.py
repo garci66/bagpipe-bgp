@@ -366,8 +366,8 @@ class DefaultGateway(ECommunity):
 
     def pack(self):
         return ( pack("!BB",
-				Encapsulation.ECommunity_TYPE,
-				Encapsulation.ECommunity_SUBTYPE) +
+				self.ECommunity_TYPE,
+				self.ECommunity_SUBTYPE) +
                 self.mac.pack() )
 
     @staticmethod
@@ -376,8 +376,8 @@ class DefaultGateway(ECommunity):
         stype = ord(data[1])
         data = data[2:]
 
-        assert(type_==Encapsulation.ECommunity_TYPE)
-        assert(stype==Encapsulation.ECommunity_SUBTYPE)
+        assert(type_==DefaultGateway.ECommunity_TYPE)
+        assert(stype==DefaultGateway.ECommunity_SUBTYPE)
         assert(len(data)==6)
 
         mac=MAC.unpack(data)
@@ -408,8 +408,8 @@ class DefaultGatewayLeg(ECommunity):
 
     def pack(self):
         return ( pack("!BB",
-				Encapsulation.ECommunity_TYPE,
-				Encapsulation.ECommunity_SUBTYPE) +
+				self.ECommunity_TYPE,
+				self.ECommunity_SUBTYPE) +
                 self.mac.pack() )
 
     @staticmethod
@@ -418,10 +418,10 @@ class DefaultGatewayLeg(ECommunity):
         stype = ord(data[1])
         data = data[2:]
 
-        assert(type_==Encapsulation.ECommunity_TYPE)
-        assert(stype==Encapsulation.ECommunity_SUBTYPE)
+        assert(type_==DefaultGatewayLeg.ECommunity_TYPE)
+        assert(stype==DefaultGatewayLeg.ECommunity_SUBTYPE)
         assert(len(data)==6)
-
+        
         mac=MAC.unpack(data)
 
         return DefaultGatewayLeg(mac)
@@ -458,8 +458,8 @@ class MacMobility(ECommunity):
 		
 	def pack(self):
 		return ( pack("!BBBBI",
-				Encapsulation.ECommunity_TYPE,
-				Encapsulation.ECommunity_SUBTYPE),
+				self.ECommunity_TYPE,
+				self.ECommunity_SUBTYPE),
                 self.flags,
                 0,
                 self.seq)
@@ -470,8 +470,8 @@ class MacMobility(ECommunity):
 		stype = ord(data[1])
 		data = data[2:]
 	
-		assert(type_==Encapsulation.ECommunity_TYPE)
-		assert(stype==Encapsulation.ECommunity_SUBTYPE)
+		assert(type_==MacMobility.ECommunity_TYPE)
+		assert(stype==MacMobility.ECommunity_SUBTYPE)
 		assert(len(data)==6)
 	
 		flags=unpack('!B',data[:1])

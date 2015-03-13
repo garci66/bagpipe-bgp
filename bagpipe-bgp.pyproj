@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5c515713-b320-4763-99d2-942f94922ed6}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>setup.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>{2af0f10d-7135-4994-9156-5d01c9c11b7e}</InterpreterId>
+    <InterpreterVersion>2.7</InterpreterVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+    <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="requirements.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="bagpipe\bgp\bgp_daemon.py" />
+    <Compile Include="bagpipe\bgp\cli\looking_glass.py" />
+    <Compile Include="bagpipe\bgp\cli\rest_attach.py" />
+    <Compile Include="bagpipe\bgp\cli\__init__.py" />
+    <Compile Include="bagpipe\bgp\common\exceptions.py" />
+    <Compile Include="bagpipe\bgp\common\logDecorator.py" />
+    <Compile Include="bagpipe\bgp\common\looking_glass.py" />
+    <Compile Include="bagpipe\bgp\common\run_command.py" />
+    <Compile Include="bagpipe\bgp\common\utils.py" />
+    <Compile Include="bagpipe\bgp\common\__init__.py" />
+    <Compile Include="bagpipe\bgp\engine\bgp_manager.py" />
+    <Compile Include="bagpipe\bgp\engine\bgp_peer_worker.py" />
+    <Compile Include="bagpipe\bgp\engine\exabgp_peer_worker.py" />
+    <Compile Include="bagpipe\bgp\engine\route_table_manager.py" />
+    <Compile Include="bagpipe\bgp\engine\tracker_worker.py" />
+    <Compile Include="bagpipe\bgp\engine\worker.py" />
+    <Compile Include="bagpipe\bgp\engine\__init__.py" />
+    <Compile Include="bagpipe\bgp\fakerr.py" />
+    <Compile Include="bagpipe\bgp\rest_api.py" />
+    <Compile Include="bagpipe\bgp\tests\test_route_table_manager.py" />
+    <Compile Include="bagpipe\bgp\tests\test_tracker_worker.py" />
+    <Compile Include="bagpipe\bgp\tests\test_vpn_instance.py" />
+    <Compile Include="bagpipe\bgp\tests\__init__.py" />
+    <Compile Include="bagpipe\bgp\vpn\dataplane_drivers.py" />
+    <Compile Include="bagpipe\bgp\vpn\evpn\linux_vxlan.py" />
+    <Compile Include="bagpipe\bgp\vpn\evpn\__init__.py" />
+    <Compile Include="bagpipe\bgp\vpn\ipvpn\mpls_linux_dataplane.py" />
+    <Compile Include="bagpipe\bgp\vpn\ipvpn\mpls_ovs_dataplane.py" />
+    <Compile Include="bagpipe\bgp\vpn\ipvpn\__init__.py" />
+    <Compile Include="bagpipe\bgp\vpn\label_allocator.py" />
+    <Compile Include="bagpipe\bgp\vpn\vpn_instance.py" />
+    <Compile Include="bagpipe\bgp\vpn\__init__.py" />
+    <Compile Include="bagpipe\bgp\__init__.py" />
+    <Compile Include="bagpipe\exabgp\application.py" />
+    <Compile Include="bagpipe\exabgp\configuration.py" />
+    <Compile Include="bagpipe\exabgp\daemon.py" />
+    <Compile Include="bagpipe\exabgp\debug.py" />
+    <Compile Include="bagpipe\exabgp\log.py" />
+    <Compile Include="bagpipe\exabgp\message\keepalive.py" />
+    <Compile Include="bagpipe\exabgp\message\nop.py" />
+    <Compile Include="bagpipe\exabgp\message\notification.py" />
+    <Compile Include="bagpipe\exabgp\message\open.py" />
+    <Compile Include="bagpipe\exabgp\message\update\attributes.py" />
+    <Compile Include="bagpipe\exabgp\message\update\attribute\aspath.py" />
+    <Compile Include="bagpipe\exabgp\message\update\attribute\communities.py" />
+    <Compile Include="bagpipe\exabgp\message\update\attribute\flag.py" />
+    <Compile Include="bagpipe\exabgp\message\update\attribute\id.py" />
+    <Compile Include="bagpipe\exabgp\message\update\attribute\labels.py" />
+    <Compile Include="bagpipe\exabgp\message\update\attribute\localpref.py" />
+    <Compile Include="bagpipe\exabgp\message\update\attribute\med.py" />
+    <Compile Include="bagpipe\exabgp\message\update\attribute\mprnlri.py" />
+    <Compile Include="bagpipe\exabgp\message\update\attribute\mpurnlri.py" />
+    <Compile Include="bagpipe\exabgp\message\update\attribute\nexthop.py" />
+    <Compile Include="bagpipe\exabgp\message\update\attribute\origin.py" />
+    <Compile Include="bagpipe\exabgp\message\update\attribute\originator_id.py" />
+    <Compile Include="bagpipe\exabgp\message\update\attribute\pmsi_tunnel.py" />
+    <Compile Include="bagpipe\exabgp\message\update\attribute\__init__.py" />
+    <Compile Include="bagpipe\exabgp\message\update\eor.py" />
+    <Compile Include="bagpipe\exabgp\message\update\flow.py" />
+    <Compile Include="bagpipe\exabgp\message\update\route.py" />
+    <Compile Include="bagpipe\exabgp\message\update\__init__.py" />
+    <Compile Include="bagpipe\exabgp\message\__init__.py" />
+    <Compile Include="bagpipe\exabgp\network\connection.py" />
+    <Compile Include="bagpipe\exabgp\network\peer.py" />
+    <Compile Include="bagpipe\exabgp\network\protocol.py" />
+    <Compile Include="bagpipe\exabgp\network\__init__.py" />
+    <Compile Include="bagpipe\exabgp\processes.py" />
+    <Compile Include="bagpipe\exabgp\rib\delta.py" />
+    <Compile Include="bagpipe\exabgp\rib\table.py" />
+    <Compile Include="bagpipe\exabgp\rib\__init__.py" />
+    <Compile Include="bagpipe\exabgp\structure\address.py" />
+    <Compile Include="bagpipe\exabgp\structure\asn.py" />
+    <Compile Include="bagpipe\exabgp\structure\evpn.py" />
+    <Compile Include="bagpipe\exabgp\structure\fragments.py" />
+    <Compile Include="bagpipe\exabgp\structure\icmp.py" />
+    <Compile Include="bagpipe\exabgp\structure\ip.py" />
+    <Compile Include="bagpipe\exabgp\structure\mpls.py" />
+    <Compile Include="bagpipe\exabgp\structure\neighbor.py" />
+    <Compile Include="bagpipe\exabgp\structure\protocol.py" />
+    <Compile Include="bagpipe\exabgp\structure\rtc.py" />
+    <Compile Include="bagpipe\exabgp\structure\tcpflags.py" />
+    <Compile Include="bagpipe\exabgp\structure\vpn.py" />
+    <Compile Include="bagpipe\exabgp\structure\__init__.py" />
+    <Compile Include="bagpipe\exabgp\utils.py" />
+    <Compile Include="bagpipe\exabgp\version.py" />
+    <Compile Include="bagpipe\exabgp\__init__.py" />
+    <Compile Include="bagpipe\__init__.py" />
+    <Compile Include="setup.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bagpipe" />
+    <Folder Include="bagpipe\bgp" />
+    <Folder Include="bagpipe\bgp\cli" />
+    <Folder Include="bagpipe\bgp\common" />
+    <Folder Include="bagpipe\bgp\engine" />
+    <Folder Include="bagpipe\bgp\tests" />
+    <Folder Include="bagpipe\bgp\vpn" />
+    <Folder Include="bagpipe\bgp\vpn\evpn" />
+    <Folder Include="bagpipe\bgp\vpn\ipvpn" />
+    <Folder Include="bagpipe\exabgp" />
+    <Folder Include="bagpipe\exabgp\message" />
+    <Folder Include="bagpipe\exabgp\message\update" />
+    <Folder Include="bagpipe\exabgp\message\update\attribute" />
+    <Folder Include="bagpipe\exabgp\network" />
+    <Folder Include="bagpipe\exabgp\rib" />
+    <Folder Include="bagpipe\exabgp\structure" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="{2af0f10d-7135-4994-9156-5d01c9c11b7e}\2.7" />
+  </ItemGroup>
+  <Import Project="$(PtvsTargetsFile)" Condition="Exists($(PtvsTargetsFile))" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="!Exists($(PtvsTargetsFile))" />
+</Project>

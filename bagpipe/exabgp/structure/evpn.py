@@ -492,3 +492,120 @@ class EVPNMulticast(EVPNNLRI):
 
 register(EVPNMulticast)
 
+class EVPNPrefixAdvertisement(EVPNNLRI):
+    '''
+    +---------------------------------------+
+    |      RD   (8 octets)                  |
+    +---------------------------------------+
+    |Ethernet Segment Identifier (10 octets)|
+    +---------------------------------------+
+    |  Ethernet Tag ID (4 octets)           |
+    +---------------------------------------+
+    |  IP Prefix Length (1 octet)           |
+    +---------------------------------------+
+    |  IP Prefix (4 or 16 octets)           |
+    +---------------------------------------+
+    |  GW IP Address (4 or 16 octets)       |
+    +---------------------------------------+
+    |  MPLS Label (3 octets)                |
+    +---------------------------------------+
+
+    '''
+    subtype = 5
+    nickname = "PrfxAdv"
+
+    def __init__(self,rd,esi,etag,label,ip,iplen,gwip):
+        '''
+        rd: a RouteDistinguisher
+        esi: an EthernetSegmentIdentifier
+        etag: an EthernetTag
+        mac: a MAC
+        label: a LabelStackEntry
+        ip: an IP address (dotted quad string notation) 
+        iplen: prefixlength for ip (defaults to 32)
+        gwip: an IP address (dotted quad string notation)
+        '''
+        self.rd = rd
+        self.esi = EthernetSegmentIdentifier(0) if esi is None else esi
+        self.etag = EthernetTag(0) if etag is None else etag
+        self.ip = ip
+        self.iplen = iplen
+        self.gwip = gwip
+        self.label = label
+        if self.label is None: self.label = NO_LABEL
+        # what to do with super ?
+        EVPNNLRI.__init__(self, self.__class__.subtype)
+
+    def __str__ (self):
+        desc = "[rd:%s][esi:%s][etag:%s][%s/%s][%s][label:%s]" % (self.rd, self.esi, self.etag, 
+                                             self.ip, self.iplen, self.gwip, 
+                                             self.label)
+        return "%s:%s" % (EVPNNLRI.__str__(self), desc) 
+    
+    def __cmp__(self,other):
+        if (isinstance(other,self.__class__)
+            and self.rd == other.rd
+            #and self.esi == other.esi  ## must *not* be part of the test
+            and self.etag == other.etag
+            and self.ip == other.ip
+            and self.iplen == other.iplen
+            #and self.gwip == other.gwip ## must *not* be part of the test
+            #and self.label == other.label ## must *not* be part of the test 
+            ):
+            return 0
+        else:
+            return -1
+        
+    def __hash__(self):
+        # esi and label must *not* be part of the hash
+        return hash("%s:%s:%s:%s:%s" % (self.rd,self.etag,self.ip,self.iplen,self.gwip))
+    
+    def _computePackedValue(self):
+        
+        value = ( self.rd.pack() +
+                  self.esi.pack() +
+                  self.etag.pack() +
+                  pack("B",self.iplen) +
+                  socket.inet_pton( socket.AF_INET, self.ip ) +
+                  socket.inet_pton( socket.AF_INET, self.gwip )
+                )
+     
+        value += self.label.pack()
+        
+        self.packedValue = value
+           
+    @staticmethod
+    def unpack(data):
+        datalen = len(data)  #Get the data length to understand if addresses are IPv4 or IPv6
+
+        rd = RouteDistinguisher.unpack(data[:8])
+        data=data[8:]
+        
+        esi = EthernetSegmentIdentifier.unpack(data[:10])
+        data=data[10:]
+        
+        etag = EthernetTag.unpack(data[:4])
+        data=data[4:]
+        
+        iplen = ord(data[0])
+        data=data[1:]
+        
+        if datalen == (26 + 8):  #Using IPv4 addresses
+            ip = socket.inet_ntop( socket.AF_INET, data[:4] )
+            data=data[4:]
+            gwip = socket.inet_ntop( socket.AF_INET, data[:4] )
+            data=data[4:]
+        elif datalen == (26 + 32): #Using IPv6 addresses
+            ip = socket.inet_ntop( socket.AF_INET6, data[:16] )
+            data=data[16:]
+            gwip = socket.inet_ntop( socket.AF_INET6, data[:16] )
+            data=data[16:]
+        else:
+            raise Exception("Data field length is given as %d, but EVPN route currently support"  
+                            "only IPv4 or IPv6(34 or 58)" % iplen)
+        
+        label = LabelStackEntry.unpack(data[:3])
+        
+        return EVPNPrefixAdvertisement(rd,esi,etag,label,ip,iplen,gwip)
+        
+register(EVPNPrefixAdvertisement)

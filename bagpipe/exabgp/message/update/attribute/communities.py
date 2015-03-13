@@ -175,7 +175,15 @@ class ECommunity (object):
 		# Encapsulation 
 		if community_stype == 0x0c:
 			return repr( Encapsulation.unpackFrom(self.community))
-				
+		
+		if community_type == 0x06:
+			if community_stype == 0x03:
+				return repr(DefaultGatewayLeg.unpackFrom(self.community))
+			if community_stype == 0x0d:
+				return repr(DefaultGateway.unpackFrom(self.community))
+			if community_stype == 0x00:
+				return repr(MacMobility.unpackFrom(self.community))	
+
 		h = 0x00
 		for byte in self.community:
 			h <<= 8

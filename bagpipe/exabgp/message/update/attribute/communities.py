@@ -15,6 +15,7 @@ from bagpipe.exabgp.message.update.attribute import AttributeID,Flag,Attribute
 
 from bagpipe.exabgp.structure.asn import ASN 
 
+from bagpipe.exabgp.structure.evpn import MAC
 
 # =================================================================== Community
 
@@ -332,6 +333,144 @@ class Encapsulation(ECommunity):
 		tunnel_type=unpack('!H',data[4:6])[0]
 		
 		return Encapsulation(tunnel_type)
+
+class DefaultGateway(ECommunity): 
+    '''
+    See the following:
+    https://tools.ietf.org/html/rfc7432#section-7.8
+    '''
+    ECommunity_TYPE = 0x06
+    ECommunity_SUBTYPE = 0x0d
+
+    def __init__(self,mac):
+        self.mac = mac
+        self.community = self.pack()
+
+    def __str__(self):
+        return "DefGwMAC:[%s]" % self.mac	
+
+    def __hash__(self):
+        return hash(self.community)
+
+    def __cmp__(self,other):
+        if isinstance(other,DefaultGateway):
+            return cmp(self.mac,other.mac)
+
+    def pack(self):
+        return ( pack("!BB",
+				Encapsulation.ECommunity_TYPE,
+				Encapsulation.ECommunity_SUBTYPE) +
+                self.mac.pack() )
+
+    @staticmethod
+    def unpackFrom(data):
+        type_  = ord(data[0]) & 0x0F
+        stype = ord(data[1])
+        data = data[2:]
+
+        assert(type_==Encapsulation.ECommunity_TYPE)
+        assert(stype==Encapsulation.ECommunity_SUBTYPE)
+        assert(len(data)==6)
+
+        mac=MAC.unpack(data)
+
+        return DefaultGateway(mac)
+
+class DefaultGatewayLeg(ECommunity): 
+    '''
+    See the following:
+    https://tools.ietf.org/html/rfc7432#section-7.8
+    '''
+    ECommunity_TYPE = 0x06
+    ECommunity_SUBTYPE = 0x03
+
+    def __init__(self,mac):
+        self.mac = mac
+        self.community = self.pack()
+
+    def __str__(self):
+        return "DefGwMACLeg:[%s]" % self.mac	
+
+    def __hash__(self):
+        return hash(self.community)
+
+    def __cmp__(self,other):
+        if isinstance(other,DefaultGatewayLeg):
+            return cmp(self.mac,other.mac)
+
+    def pack(self):
+        return ( pack("!BB",
+				Encapsulation.ECommunity_TYPE,
+				Encapsulation.ECommunity_SUBTYPE) +
+                self.mac.pack() )
+
+    @staticmethod
+    def unpackFrom(data):
+        type_  = ord(data[0]) & 0x0F
+        stype = ord(data[1])
+        data = data[2:]
+
+        assert(type_==Encapsulation.ECommunity_TYPE)
+        assert(stype==Encapsulation.ECommunity_SUBTYPE)
+        assert(len(data)==6)
+
+        mac=MAC.unpack(data)
+
+        return DefaultGatewayLeg(mac)
+
+class MacMobility(ECommunity): 
+	'''
+	 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+	+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	| Type=0x06     | Sub-Type=0x00 |Flags(1 octet)|  Reserved=0    |
+	+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	|                       Sequence Number                         |
+	+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	As defined:
+	https://tools.ietf.org/html/rfc7432#section-7.7
+	'''
+	ECommunity_TYPE = 0x06
+	ECommunity_SUBTYPE = 0x00
+
+	def __init__(self,flags,seq):
+		self.flags = flags
+		self.seq = seq
+		self.community = self.pack()
+
+	def __str__(self):
+		return "MacMob:%#x:%d" % (self.flags,	self.seq)
+
+	def __hash__(self):
+		return hash(self.community)
+
+	def __cmp__(self,other):
+		if isinstance(other,MacMobility):
+			return cmp(self.flags,other.flags and
+                       self.seq,other.seq)
+		
+	def pack(self):
+		return ( pack("!BBBBI",
+				Encapsulation.ECommunity_TYPE,
+				Encapsulation.ECommunity_SUBTYPE),
+                self.flags,
+                0,
+                self.seq)
+	
+	@staticmethod
+	def unpackFrom(data):
+		type_  = ord(data[0]) & 0x0F
+		stype = ord(data[1])
+		data = data[2:]
+	
+		assert(type_==Encapsulation.ECommunity_TYPE)
+		assert(stype==Encapsulation.ECommunity_SUBTYPE)
+		assert(len(data)==6)
+	
+		flags=unpack('!B',data[:1])
+		data=data[2:]
+		seq=unpack('!I',data[:4])
+
+		return MacMobility(flags,seq)
 
 
 # =================================================================== ECommunities (16)

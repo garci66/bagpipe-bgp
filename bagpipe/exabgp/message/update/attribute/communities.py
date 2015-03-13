@@ -459,10 +459,10 @@ class MacMobility(ECommunity):
 	def pack(self):
 		return ( pack("!BBBBI",
 				self.ECommunity_TYPE,
-				self.ECommunity_SUBTYPE),
+				self.ECommunity_SUBTYPE,
                 self.flags,
                 0,
-                self.seq)
+                self.seq))
 	
 	@staticmethod
 	def unpackFrom(data):

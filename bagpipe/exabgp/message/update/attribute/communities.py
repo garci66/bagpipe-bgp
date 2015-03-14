@@ -457,7 +457,7 @@ class MacMobility(ECommunity):
                        self.seq,other.seq)
 		
 	def pack(self):
-		return ( pack("!BBBBI",
+		return ( pack("!BBBBL",
 				self.ECommunity_TYPE,
 				self.ECommunity_SUBTYPE,
                 self.flags,
@@ -474,9 +474,9 @@ class MacMobility(ECommunity):
 		assert(stype==MacMobility.ECommunity_SUBTYPE)
 		assert(len(data)==6)
 	
-		flags=unpack('!B',data[:1])
+		flags=unpack('!B',data[:1])[0]
 		data=data[2:]
-		seq=unpack('!I',data[:4])
+		seq=int(unpack('!L',data[:4])[0])
 
 		return MacMobility(flags,seq)
 
